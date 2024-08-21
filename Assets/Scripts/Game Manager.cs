@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
@@ -20,24 +21,54 @@ public class GameManager : MonoBehaviour
     public void PressedNewButton()
     {
         puzzleData = puzzleDealer.CreateRandomPuzzleData();
-        gridController.GenerateGrid(puzzleData);
+        gridController.GenerateGrid(puzzleData, true);
     }
 
     readonly WaitForEndOfFrame WFEOF;
     public Cell cellZero;
     public void Swap(Cell cellSwap)
     {
-        print(cellSwap.transform.position + " -> " + cellZero.transform.position);
         IEnumerator swapAnim()
         {
+            // Swap visually
             gridController.GLG.enabled = false;
-            const float animTime = 0.5f;
+            const float animTime = 0.1f;
             for (float t = 0; t < animTime; t += Time.deltaTime)
             {
                 cellSwap.transform.position = Vector3.Lerp(cellSwap.transform.position, cellZero.transform.position, t / animTime);
                 yield return WFEOF;
             }
-            //gridController.GLG.enabled = true;
+
+            // Get coordinates of cells
+            int cellSwap_row = 0;
+            int cellSwap_col = 0;
+            int cellZero_row = 0;
+            int cellZero_col = 0;
+            for (int r = 0; r < puzzleData.GetLength(0); r++) // For each row
+            {
+                for (int c = 0; c < puzzleData.GetLength(1); c++) // For each column
+                {
+                    if (puzzleData[r, c] == 0)
+                    {
+                        cellZero_row = r;
+                        cellZero_col = c;
+                    }
+                    if (puzzleData[r, c] == cellSwap.myValue)
+                    {
+                        cellSwap_row = r;
+                        cellSwap_col = c;
+                    }
+                }
+            }
+            // Swap the data
+            int the_value = cellSwap.myValue;
+            puzzleData[cellZero_row, cellZero_col] = the_value;
+            puzzleData[cellSwap_row, cellSwap_col] = 0;
+
+            // Update grid
+            gridController.GenerateGrid(puzzleData);
+
+            gridController.GLG.enabled = true;
         }
         StartCoroutine(swapAnim());
     }

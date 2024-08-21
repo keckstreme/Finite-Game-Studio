@@ -5560,6 +5560,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridController: {fileID: 902754345}
   puzzleDealer: {fileID: 902754344}
+  cellZero: {fileID: 0}
 --- !u!4 &902754343
 Transform:
   m_ObjectHideFlags: 0

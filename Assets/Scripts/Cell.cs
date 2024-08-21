@@ -10,24 +10,34 @@ public class Cell : MonoBehaviour
     [SerializeField] TextMeshProUGUI text;
     [SerializeField] Animator animator;
     public int myValue;
+    public int myRow;
+    public int myColumn;
 
-    public void LoadCell(int value)
+    public void LoadCell(int value, bool immediate = false)
     {
         myValue = value;
         if (value == 0) // Empty cell
         {
-            GameManager.Instance.cellZero = this;
             text.gameObject.SetActive(false);
             bg.enabled = false;
+
+            GameManager.Instance.cellZero = this;
         }
         else
         {
             text.gameObject.SetActive(true);
             bg.enabled = true;
-            text.text = value.ToString();
             bg.color = ThemeManager.Instance.accentColor;
+            text.text = value.ToString();
         }
-        Setcolor(new Color(0, 0, 0, 0), new Color(0, 0, 0, 0)); // Hide for animation
+        if (immediate)
+        {
+            Setcolor(ThemeManager.Instance.accentColor, ThemeManager.Instance.thirdColor);
+        }
+        else
+        {
+            Setcolor(new Color(0, 0, 0, 0), new Color(0, 0, 0, 0)); // Hide for animation
+        }
     }
 
     public void StartAnimation()

@@ -10,7 +10,7 @@ public class GridController : MonoBehaviour
     [SerializeField] List<Cell> cells = new();
     public GridLayoutGroup GLG;
 
-    public void GenerateGrid(int[,] gridData)
+    public void GenerateGrid(int[,] gridData, bool fresh = false)
     {
         int rowCount = gridData.GetLength(0);
         int columnCount = gridData.GetLength(1);
@@ -23,47 +23,65 @@ public class GridController : MonoBehaviour
             linear_gridData[counter++] = item;
         }
 
-        // Activate correct amount of cells
-        ActivateCellsStylized(gridData, linear_gridData);
-
-        // Place cells
-        if (rowCount <= columnCount) // Wide or square
+        if (fresh)
         {
-            // Limit grid column count
-            GLG.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-            GLG.constraintCount = columnCount;
+            // Activate correct amount of cells
+            ActivateCellsStylized(gridData, linear_gridData);
 
-            // Resize cells - consider columns
-            float cellSize = (canvasRT.rect.width - GLG.padding.horizontal + GLG.spacing.x) / columnCount - GLG.spacing.x;
-            GLG.cellSize = new(cellSize, cellSize);
+            // Place cells
+            if (rowCount <= columnCount) // Wide or square
+            {
+                // Limit grid column count
+                GLG.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+                GLG.constraintCount = columnCount;
 
-            // Set grid bg width to be as wide as possible
-            gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, canvasRT.rect.width);
+                // Resize cells - consider columns
+                float cellSize = (canvasRT.rect.width - GLG.padding.horizontal + GLG.spacing.x) / columnCount - GLG.spacing.x;
+                GLG.cellSize = new(cellSize, cellSize);
 
-            // Set grid bg height
-            float height = GLG.padding.vertical + rowCount * cellSize + (rowCount - 1) * GLG.spacing.y;
-            gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+                // Set grid bg width to be as wide as possible
+                gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, canvasRT.rect.width);
+
+                // Set grid bg height
+                float height = GLG.padding.vertical + rowCount * cellSize + (rowCount - 1) * GLG.spacing.y;
+                gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+            }
+            else // Tall
+            {
+                // Limit grid row count
+                GLG.constraint = GridLayoutGroup.Constraint.FixedRowCount;
+                GLG.constraintCount = rowCount;
+
+                // Resize cells - consider rows
+                float cellSize = (canvasRT.rect.width - GLG.padding.horizontal + GLG.spacing.x) / rowCount - GLG.spacing.x;
+                GLG.cellSize = new(cellSize, cellSize);
+
+                // Set grid bg height to be as wide as possible
+                gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, canvasRT.rect.width);
+
+                // Set grid bg width
+                float height = GLG.padding.vertical + columnCount * cellSize + (columnCount - 1) * GLG.spacing.y;
+                gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, height);
+            }
         }
-        else // Tall
+        else
         {
-            // Limit grid row count
-            GLG.constraint = GridLayoutGroup.Constraint.FixedRowCount;
-            GLG.constraintCount = rowCount;
-
-            // Resize cells - consider rows
-            float cellSize = (canvasRT.rect.width - GLG.padding.horizontal + GLG.spacing.x) / rowCount - GLG.spacing.x;
-            GLG.cellSize = new(cellSize, cellSize);
-
-            // Set grid bg height to be as wide as possible
-            gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, canvasRT.rect.width);
-
-            // Set grid bg width
-            float height = GLG.padding.vertical + columnCount * cellSize + (columnCount - 1) * GLG.spacing.y;
-            gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, height);
+            ActivateCellsStandard(gridData, linear_gridData);
         }
     }
 
-    public List<Cell> requiredCells_delete;
+    private void ActivateCellsStandard(int[,] gridData, int[] linear_gridData)
+    {
+        for (int i = 0; i < cells.Count; i++)
+        {
+            bool activate = i < gridData.Length;
+            cells[i].gameObject.SetActive(activate);
+            if (activate)
+            {
+                cells[i].LoadCell(linear_gridData[i], true);
+            }
+        }
+    }
 
     public int shuffleAnimationStyleCounter = 0;
     private void ActivateCellsStylized(int[,] gridData, int[] linear_gridData)
@@ -81,12 +99,10 @@ public class GridController : MonoBehaviour
             cells[i].gameObject.SetActive(activate);
             if (activate)
             {
-                cells[i].LoadCell(linear_gridData[i]);
+                cells[i].LoadCell(linear_gridData[i], true);
                 requiredCells.Add(cells[i]);
             }
         }
-
-        requiredCells_delete = requiredCells;
 
         if (shuffleAnimationStyleCounter == 0) StartCoroutine(sudden());
         if (shuffleAnimationStyleCounter == 1) StartCoroutine(random());
