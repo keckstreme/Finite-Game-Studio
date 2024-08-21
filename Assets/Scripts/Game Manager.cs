@@ -28,6 +28,44 @@ public class GameManager : MonoBehaviour
     public Cell cellZero;
     public void Swap(Cell cellSwap)
     {
+        int the_value = cellSwap.myValue;
+
+        // Get coordinates of cells
+        int cellSwap_row = 0;
+        int cellSwap_col = 0;
+        int cellZero_row = 0;
+        int cellZero_col = 0;
+        for (int r = 0; r < puzzleData.GetLength(0); r++) // For each row
+        {
+            for (int c = 0; c < puzzleData.GetLength(1); c++) // For each column
+            {
+                if (puzzleData[r, c] == 0)
+                {
+                    cellZero_row = r;
+                    cellZero_col = c;
+                }
+                if (puzzleData[r, c] == cellSwap.myValue)
+                {
+                    cellSwap_row = r;
+                    cellSwap_col = c;
+                }
+            }
+        }
+
+        // Skip if not neigbor to empty cell
+        int neigborTop = -1;
+        int neigborBottom = -1;
+        int neigborLeft = -1;
+        int neigborRight = -1;
+        if (cellZero_row > 0) neigborTop = puzzleData[cellZero_row - 1, cellZero_col];
+        if (cellZero_row < puzzleData.GetLength(0) - 1) neigborBottom = puzzleData[cellZero_row + 1, cellZero_col];
+        if (cellZero_col > 0) neigborLeft = puzzleData[cellZero_row, cellZero_col - 1];
+        if (cellZero_col < puzzleData.GetLength(1) - 1) neigborRight = puzzleData[cellZero_row, cellZero_col + 1];
+        if (the_value == neigborTop || the_value == neigborBottom || the_value == neigborLeft || the_value == neigborRight) // If any of them
+        {
+            StartCoroutine(swapAnim());
+        }
+
         IEnumerator swapAnim()
         {
             // Swap visually
@@ -39,29 +77,7 @@ public class GameManager : MonoBehaviour
                 yield return WFEOF;
             }
 
-            // Get coordinates of cells
-            int cellSwap_row = 0;
-            int cellSwap_col = 0;
-            int cellZero_row = 0;
-            int cellZero_col = 0;
-            for (int r = 0; r < puzzleData.GetLength(0); r++) // For each row
-            {
-                for (int c = 0; c < puzzleData.GetLength(1); c++) // For each column
-                {
-                    if (puzzleData[r, c] == 0)
-                    {
-                        cellZero_row = r;
-                        cellZero_col = c;
-                    }
-                    if (puzzleData[r, c] == cellSwap.myValue)
-                    {
-                        cellSwap_row = r;
-                        cellSwap_col = c;
-                    }
-                }
-            }
             // Swap the data
-            int the_value = cellSwap.myValue;
             puzzleData[cellZero_row, cellZero_col] = the_value;
             puzzleData[cellSwap_row, cellSwap_col] = 0;
 
@@ -70,7 +86,6 @@ public class GameManager : MonoBehaviour
 
             gridController.GLG.enabled = true;
         }
-        StartCoroutine(swapAnim());
     }
 }
 

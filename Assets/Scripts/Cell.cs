@@ -36,7 +36,7 @@ public class Cell : MonoBehaviour
         }
         else
         {
-            Setcolor(new Color(0, 0, 0, 0), new Color(0, 0, 0, 0)); // Hide for animation
+            HideMe(); // Hide for animation
         }
     }
 
@@ -55,5 +55,10 @@ public class Cell : MonoBehaviour
     public void PressedOnMe()
     {
         GameManager.Instance.Swap(this);
+    }
+
+    public void HideMe()
+    {
+        Setcolor(new Color(0, 0, 0, 0), new Color(0, 0, 0, 0));
     }
 }

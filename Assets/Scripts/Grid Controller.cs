@@ -99,7 +99,7 @@ public class GridController : MonoBehaviour
             cells[i].gameObject.SetActive(activate);
             if (activate)
             {
-                cells[i].LoadCell(linear_gridData[i], true);
+                cells[i].LoadCell(linear_gridData[i]);
                 requiredCells.Add(cells[i]);
             }
         }
@@ -130,6 +130,7 @@ public class GridController : MonoBehaviour
         {
             // Activate shuffled cells
             requiredCells.ShuffleCells();
+
             foreach (Cell cell in requiredCells)
             {
                 cell.StartAnimation();
