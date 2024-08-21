@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] GridController gridController;
     [SerializeField] PuzzleDealer puzzleDealer;
 
+    public bool fingerDown;
+    public Cell fingerDownCell;
+
     int[,] puzzleData;
 
     public void PressedNewButton()

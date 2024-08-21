@@ -16,21 +16,8 @@ public class Cell : MonoBehaviour
     public void LoadCell(int value, bool immediate = false)
     {
         myValue = value;
-        if (value == 0) // Empty cell
-        {
-            text.gameObject.SetActive(false);
-            bg.enabled = false;
 
-            GameManager.Instance.cellZero = this;
-        }
-        else
-        {
-            text.gameObject.SetActive(true);
-            bg.enabled = true;
-            bg.color = ThemeManager.Instance.accentColor;
-            text.text = value.ToString();
-        }
-        if (immediate)
+        if (immediate && myValue != 0)
         {
             Setcolor(ThemeManager.Instance.accentColor, ThemeManager.Instance.thirdColor);
         }
@@ -38,10 +25,20 @@ public class Cell : MonoBehaviour
         {
             HideMe(); // Hide for animation
         }
+
+        if (value == 0) // Empty cell
+        {
+            GameManager.Instance.cellZero = this;
+        }
+        else
+        {
+            text.text = value.ToString();
+        }
     }
 
     public void StartAnimation()
     {
+        if (myValue == 0) return;
         Setcolor(ThemeManager.Instance.accentColor, ThemeManager.Instance.thirdColor);
         animator.SetTrigger("Start");
     }
@@ -60,5 +57,23 @@ public class Cell : MonoBehaviour
     public void HideMe()
     {
         Setcolor(new Color(0, 0, 0, 0), new Color(0, 0, 0, 0));
+    }
+
+    public void PointerDown(bool isTrue)
+    {
+        GameManager.Instance.fingerDown = isTrue;
+        GameManager.Instance.fingerDownCell = this;
+    }
+
+    public void PointerEnter() // Activate fingerDownCell if pointer entered to empty tile (basically user dragged finger)
+    {
+        if (GameManager.Instance.fingerDown)
+        {
+            if (myValue == 0)
+            {
+                GameManager.Instance.fingerDown = false;
+                GameManager.Instance.fingerDownCell.PressedOnMe();
+            }
+        }
     }
 }
