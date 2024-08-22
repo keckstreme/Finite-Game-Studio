@@ -16,21 +16,30 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         cheat = false;
+        if (!save.LoadGame()) // If savefile does not exist, generate new board
+        {
+            PressedNewButton();
+        }
+        else // Load grid
+        {
+            gridController.GenerateGrid(playerData.puzzleData);
+        }
     }
 
     [SerializeField] GridController gridController;
     [SerializeField] PuzzleDealer puzzleDealer;
+    public Save save;
 
     public bool fingerDown;
     public Cell fingerDownCell;
 
-    int[,] puzzleData;
     public PlayerData playerData;
 
     public void PressedNewButton()
     {
-        puzzleData = puzzleDealer.CreateRandomPuzzleData();
-        gridController.GenerateGrid(puzzleData, true);
+        playerData.puzzleData = puzzleDealer.CreateRandomPuzzleData();
+        gridController.GenerateGrid(playerData.puzzleData, true);
+        save.SaveGame();
     }
 
     readonly WaitForEndOfFrame WFEOF;
@@ -45,16 +54,16 @@ public class GameManager : MonoBehaviour
         int cellSwap_col = 0;
         int cellZero_row = 0;
         int cellZero_col = 0;
-        for (int r = 0; r < puzzleData.GetLength(0); r++) // For each row
+        for (int r = 0; r < playerData.puzzleData.GetLength(0); r++) // For each row
         {
-            for (int c = 0; c < puzzleData.GetLength(1); c++) // For each column
+            for (int c = 0; c < playerData.puzzleData.GetLength(1); c++) // For each column
             {
-                if (puzzleData[r, c] == 0)
+                if (playerData.puzzleData[r, c] == 0)
                 {
                     cellZero_row = r;
                     cellZero_col = c;
                 }
-                if (puzzleData[r, c] == cellSwap.myValue)
+                if (playerData.puzzleData[r, c] == cellSwap.myValue)
                 {
                     cellSwap_row = r;
                     cellSwap_col = c;
@@ -67,10 +76,10 @@ public class GameManager : MonoBehaviour
         int neigborBottom = -1;
         int neigborLeft = -1;
         int neigborRight = -1;
-        if (cellZero_row > 0) neigborTop = puzzleData[cellZero_row - 1, cellZero_col];
-        if (cellZero_row < puzzleData.GetLength(0) - 1) neigborBottom = puzzleData[cellZero_row + 1, cellZero_col];
-        if (cellZero_col > 0) neigborLeft = puzzleData[cellZero_row, cellZero_col - 1];
-        if (cellZero_col < puzzleData.GetLength(1) - 1) neigborRight = puzzleData[cellZero_row, cellZero_col + 1];
+        if (cellZero_row > 0) neigborTop = playerData.puzzleData[cellZero_row - 1, cellZero_col];
+        if (cellZero_row < playerData.puzzleData.GetLength(0) - 1) neigborBottom = playerData.puzzleData[cellZero_row + 1, cellZero_col];
+        if (cellZero_col > 0) neigborLeft = playerData.puzzleData[cellZero_row, cellZero_col - 1];
+        if (cellZero_col < playerData.puzzleData.GetLength(1) - 1) neigborRight = playerData.puzzleData[cellZero_row, cellZero_col + 1];
         if (cheat || the_value == neigborTop || the_value == neigborBottom || the_value == neigborLeft || the_value == neigborRight) // If any of them
         {
             StartCoroutine(swapAnim());
@@ -88,11 +97,11 @@ public class GameManager : MonoBehaviour
             }
 
             // Swap the data
-            puzzleData[cellZero_row, cellZero_col] = the_value;
-            puzzleData[cellSwap_row, cellSwap_col] = 0;
+            playerData.puzzleData[cellZero_row, cellZero_col] = the_value;
+            playerData.puzzleData[cellSwap_row, cellSwap_col] = 0;
 
             // Update grid
-            gridController.GenerateGrid(puzzleData);
+            gridController.GenerateGrid(playerData.puzzleData);
             gridController.GLG.enabled = true;
 
             CheckWin();
@@ -102,9 +111,9 @@ public class GameManager : MonoBehaviour
     public void CheckWin()
     {
         // Crush 2D into 1D
-        int[] linear_puzzleData = new int[puzzleData.Length];
+        int[] linear_puzzleData = new int[playerData.puzzleData.Length];
         int counter = 0;
-        foreach (var item in puzzleData)
+        foreach (var item in playerData.puzzleData)
         {
             linear_puzzleData[counter++] = item;
         }
@@ -119,10 +128,6 @@ public class GameManager : MonoBehaviour
         {
             print("WONWONWONWONW");
         }
-        else
-        {
-            print("u lose ");
-        }
     }
 
     [Header("Settings Scene References")]
@@ -131,31 +136,31 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject settingsWindow;
     private void UpdateData()
     {
-        widthText.text = puzzleDealer.columns.ToString();
-        heightText.text = puzzleDealer.rows.ToString();
+        widthText.text = playerData.columns.ToString();
+        heightText.text = playerData.rows.ToString();
     }
     public void IncreaseWidth()
     {
-        if (puzzleDealer.columns < 10)
+        if (playerData.columns < 10)
         {
-            puzzleDealer.columns++;
+            playerData.columns++;
         }
         else
         {
-            puzzleDealer.columns = 3;
+            playerData.columns = 3;
         }
         UpdateData();
         PressedNewButton();
     }
     public void IncreaseHeight()
     {
-        if (puzzleDealer.rows < 10)
+        if (playerData.rows < 10)
         {
-            puzzleDealer.rows++;
+            playerData.rows++;
         }
         else
         {
-            puzzleDealer.rows = 3;
+            playerData.rows = 3;
         }
         UpdateData();
         PressedNewButton();

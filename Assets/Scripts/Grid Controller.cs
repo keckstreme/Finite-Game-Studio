@@ -23,46 +23,46 @@ public class GridController : MonoBehaviour
             linear_gridData[counter++] = item;
         }
 
+        // Place cells
+        if (rowCount <= columnCount) // Wide or square
+        {
+            // Limit grid column count
+            GLG.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+            GLG.constraintCount = columnCount;
+
+            // Resize cells - consider columns
+            float cellSize = (canvasRT.rect.width - GLG.padding.horizontal + GLG.spacing.x) / columnCount - GLG.spacing.x;
+            GLG.cellSize = new(cellSize, cellSize);
+
+            // Set grid bg width to be as wide as possible
+            gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, canvasRT.rect.width);
+
+            // Set grid bg height
+            float height = GLG.padding.vertical + rowCount * cellSize + (rowCount - 1) * GLG.spacing.y;
+            gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+        }
+        else // Tall
+        {
+            // Limit grid row count
+            GLG.constraint = GridLayoutGroup.Constraint.FixedRowCount;
+            GLG.constraintCount = rowCount;
+
+            // Resize cells - consider rows
+            float cellSize = (canvasRT.rect.width - GLG.padding.horizontal + GLG.spacing.x) / rowCount - GLG.spacing.x;
+            GLG.cellSize = new(cellSize, cellSize);
+
+            // Set grid bg height to be as wide as possible
+            gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, canvasRT.rect.width);
+
+            // Set grid bg width
+            float height = GLG.padding.vertical + columnCount * cellSize + (columnCount - 1) * GLG.spacing.y;
+            gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, height);
+        }
+
         if (fresh)
         {
             // Activate correct amount of cells
             ActivateCellsStylized(gridData, linear_gridData);
-
-            // Place cells
-            if (rowCount <= columnCount) // Wide or square
-            {
-                // Limit grid column count
-                GLG.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-                GLG.constraintCount = columnCount;
-
-                // Resize cells - consider columns
-                float cellSize = (canvasRT.rect.width - GLG.padding.horizontal + GLG.spacing.x) / columnCount - GLG.spacing.x;
-                GLG.cellSize = new(cellSize, cellSize);
-
-                // Set grid bg width to be as wide as possible
-                gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, canvasRT.rect.width);
-
-                // Set grid bg height
-                float height = GLG.padding.vertical + rowCount * cellSize + (rowCount - 1) * GLG.spacing.y;
-                gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
-            }
-            else // Tall
-            {
-                // Limit grid row count
-                GLG.constraint = GridLayoutGroup.Constraint.FixedRowCount;
-                GLG.constraintCount = rowCount;
-
-                // Resize cells - consider rows
-                float cellSize = (canvasRT.rect.width - GLG.padding.horizontal + GLG.spacing.x) / rowCount - GLG.spacing.x;
-                GLG.cellSize = new(cellSize, cellSize);
-
-                // Set grid bg height to be as wide as possible
-                gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, canvasRT.rect.width);
-
-                // Set grid bg width
-                float height = GLG.padding.vertical + columnCount * cellSize + (columnCount - 1) * GLG.spacing.y;
-                gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, height);
-            }
         }
         else
         {
@@ -127,6 +127,10 @@ public class GridController : MonoBehaviour
 
         IEnumerator random()
         {
+            foreach (Cell cell in requiredCells)
+            {
+                cell.HideMe();
+            }
             // Activate shuffled cells
             requiredCells.ShuffleCells();
 

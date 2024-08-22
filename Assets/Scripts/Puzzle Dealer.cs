@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class PuzzleDealer : MonoBehaviour
 {
-    public int rows;
-    public int columns;
-
     public int[,] CreateRandomPuzzleData()
     {
+        int rows = GameManager.Instance.playerData.rows;
+        int columns = GameManager.Instance.playerData.columns;
+
         int[,] puzzle = new int[rows, columns]; // Create empty puzzle array
 
         int[] randomizedElements = CreateRandomizedSequence(rows * columns); // Create randomized values
@@ -37,6 +37,6 @@ public class PuzzleDealer : MonoBehaviour
             randomizedElements[i] = i;
         }
 
-        return randomizedElements.Shuffle(columns, rows);
+        return randomizedElements.Shuffle(GameManager.Instance.playerData.columns, GameManager.Instance.playerData.rows);
     }
 }
