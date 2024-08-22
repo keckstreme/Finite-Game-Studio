@@ -15,7 +15,10 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        paused = true;
         cheat = false;
+        SetActiveSettingsWindow(false);
+
         if (!save.LoadGame()) // If savefile does not exist, generate new board
         {
             PressedNewButton();
@@ -23,6 +26,14 @@ public class GameManager : MonoBehaviour
         else // Load grid
         {
             gridController.GenerateGrid(playerData.puzzleData);
+        }
+    }
+
+    private void Update()
+    {
+        if (!paused)
+        {
+            playerData.puzzleTime += Time.deltaTime;
         }
     }
 
@@ -34,10 +45,13 @@ public class GameManager : MonoBehaviour
     public Cell fingerDownCell;
 
     public PlayerData playerData;
+    public bool paused;
 
     public void PressedNewButton()
     {
+        paused = true;
         playerData.puzzleData = puzzleDealer.CreateRandomPuzzleData();
+        playerData.puzzleMoves = 0;
         gridController.GenerateGrid(playerData.puzzleData, true);
         save.SaveGame();
     }
@@ -82,18 +96,25 @@ public class GameManager : MonoBehaviour
         if (cellZero_col < playerData.puzzleData.GetLength(1) - 1) neigborRight = playerData.puzzleData[cellZero_row, cellZero_col + 1];
         if (cheat || the_value == neigborTop || the_value == neigborBottom || the_value == neigborLeft || the_value == neigborRight) // If any of them
         {
-            StartCoroutine(swapAnim());
+            StartCoroutine(performSwap());
         }
 
-        IEnumerator swapAnim()
+        IEnumerator performSwap()
         {
             // Swap visually
             gridController.GLG.enabled = false;
-            const float animTime = 0.1f;
-            for (float t = 0; t < animTime; t += Time.deltaTime)
+            if (playerData.animationsOn)
             {
-                cellSwap.transform.position = Vector3.Lerp(cellSwap.transform.position, cellZero.transform.position, t / animTime);
-                yield return WFEOF;
+                float animTime = 0.1f;
+                for (float t = 0; t < animTime; t += Time.deltaTime)
+                {
+                    cellSwap.transform.position = Vector3.Lerp(cellSwap.transform.position, cellZero.transform.position, t / animTime);
+                    yield return WFEOF;
+                }
+            }
+            else
+            {
+                cellSwap.transform.position = cellZero.transform.position;
             }
 
             // Swap the data
@@ -103,6 +124,9 @@ public class GameManager : MonoBehaviour
             // Update grid
             gridController.GenerateGrid(playerData.puzzleData);
             gridController.GLG.enabled = true;
+
+            playerData.puzzleMoves++;
+            paused = false;
 
             CheckWin();
         }
@@ -133,11 +157,13 @@ public class GameManager : MonoBehaviour
     [Header("Settings Scene References")]
     [SerializeField] TextMeshProUGUI widthText;
     [SerializeField] TextMeshProUGUI heightText;
+    [SerializeField] TextMeshProUGUI animationSettingText;
     [SerializeField] GameObject settingsWindow;
     private void UpdateData()
     {
         widthText.text = playerData.columns.ToString();
         heightText.text = playerData.rows.ToString();
+        animationSettingText.text = playerData.animationsOn ? "ON" : "OFF";
     }
     public void IncreaseWidth()
     {
@@ -169,6 +195,17 @@ public class GameManager : MonoBehaviour
     {
         UpdateData();
         settingsWindow.SetActive(active);
+    }
+    public void ToggleAnimations()
+    {
+        playerData.animationsOn = !playerData.animationsOn;
+        UpdateData();
+        save.SaveGame();
+    }
+
+    public void SetPause(bool pause)
+    {
+        paused = pause;
     }
 }
 
@@ -278,5 +315,14 @@ public static class Extensions
                 return inversions % 2 == 0;
             }
         }
+    }
+
+    public static string FormatTime(float totalSeconds)
+    {
+        int minutes = (int)totalSeconds / 60;
+        int seconds = (int)totalSeconds % 60;
+        int milliseconds = (int)((totalSeconds - Math.Floor(totalSeconds)) * 1000);
+
+        return minutes.ToString("0") + ":" + seconds.ToString("00") + "." + milliseconds.ToString("000");
     }
 }

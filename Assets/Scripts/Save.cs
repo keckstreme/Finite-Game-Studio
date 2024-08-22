@@ -16,7 +16,7 @@ public class Save : MonoBehaviour
         Debug.Log("Game was successfully saved to file: " + saveFilePath);
     }
 
-    public bool LoadGame() // Note!!! Some runtime-calculated values will be lost.
+    public bool LoadGame()
     {
         string saveFilePath = Application.persistentDataPath + "/data";
         bool fileExists = File.Exists(saveFilePath);
@@ -47,5 +47,4 @@ public struct PlayerData
     public int columns;
     public bool animationsOn;
     public int colorTheme;
-    public int gameMode;
 }

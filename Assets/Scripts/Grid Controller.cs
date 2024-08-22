@@ -59,9 +59,8 @@ public class GridController : MonoBehaviour
             gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, height);
         }
 
-        if (fresh)
+        if (fresh && GameManager.Instance.playerData.animationsOn)
         {
-            // Activate correct amount of cells
             ActivateCellsStylized(gridData, linear_gridData);
         }
         else
@@ -72,6 +71,7 @@ public class GridController : MonoBehaviour
 
     private void ActivateCellsStandard(int[,] gridData, int[] linear_gridData)
     {
+        // Activate correct amount of cells
         for (int i = 0; i < cells.Count; i++)
         {
             bool activate = i < gridData.Length;
