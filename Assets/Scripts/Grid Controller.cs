@@ -90,7 +90,6 @@ public class GridController : MonoBehaviour
         int rowCount = gridData.GetLength(0);
 
         List<Cell> requiredCells = new(); // This will be used for animations
-        //Print2DArray(gridData);
 
         // Activate all required cells and fill requiredCells
         for (int i = 0; i < cells.Count; i++)

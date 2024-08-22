@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,6 +13,11 @@ public class GameManager : MonoBehaviour
         Instance = this;
     }
 
+    private void Start()
+    {
+        cheat = false;
+    }
+
     [SerializeField] GridController gridController;
     [SerializeField] PuzzleDealer puzzleDealer;
 
@@ -20,6 +25,7 @@ public class GameManager : MonoBehaviour
     public Cell fingerDownCell;
 
     int[,] puzzleData;
+    public PlayerData playerData;
 
     public void PressedNewButton()
     {
@@ -29,6 +35,7 @@ public class GameManager : MonoBehaviour
 
     readonly WaitForEndOfFrame WFEOF;
     public Cell cellZero;
+    [SerializeField] bool cheat; // skips neighbor checking for easy testing
     public void Swap(Cell cellSwap)
     {
         int the_value = cellSwap.myValue;
@@ -64,7 +71,7 @@ public class GameManager : MonoBehaviour
         if (cellZero_row < puzzleData.GetLength(0) - 1) neigborBottom = puzzleData[cellZero_row + 1, cellZero_col];
         if (cellZero_col > 0) neigborLeft = puzzleData[cellZero_row, cellZero_col - 1];
         if (cellZero_col < puzzleData.GetLength(1) - 1) neigborRight = puzzleData[cellZero_row, cellZero_col + 1];
-        if (the_value == neigborTop || the_value == neigborBottom || the_value == neigborLeft || the_value == neigborRight) // If any of them
+        if (cheat || the_value == neigborTop || the_value == neigborBottom || the_value == neigborLeft || the_value == neigborRight) // If any of them
         {
             StartCoroutine(swapAnim());
         }
@@ -86,9 +93,77 @@ public class GameManager : MonoBehaviour
 
             // Update grid
             gridController.GenerateGrid(puzzleData);
-
             gridController.GLG.enabled = true;
+
+            CheckWin();
         }
+    }
+
+    public void CheckWin()
+    {
+        // Crush 2D into 1D
+        int[] linear_puzzleData = new int[puzzleData.Length];
+        int counter = 0;
+        foreach (var item in puzzleData)
+        {
+            linear_puzzleData[counter++] = item;
+        }
+
+        bool win = true;
+        for (int i = 0; i < linear_puzzleData.Length - 1; i++) // Skip last cell because in solved puzzle it will be 0
+        {
+            if (linear_puzzleData[i] != i + 1) win = false; // If any of one element is in wrong place, didn't win
+        }
+
+        if (win)
+        {
+            print("WONWONWONWONW");
+        }
+        else
+        {
+            print("u lose ");
+        }
+    }
+
+    [Header("Settings Scene References")]
+    [SerializeField] TextMeshProUGUI widthText;
+    [SerializeField] TextMeshProUGUI heightText;
+    [SerializeField] GameObject settingsWindow;
+    private void UpdateData()
+    {
+        widthText.text = puzzleDealer.columns.ToString();
+        heightText.text = puzzleDealer.rows.ToString();
+    }
+    public void IncreaseWidth()
+    {
+        if (puzzleDealer.columns < 10)
+        {
+            puzzleDealer.columns++;
+        }
+        else
+        {
+            puzzleDealer.columns = 3;
+        }
+        UpdateData();
+        PressedNewButton();
+    }
+    public void IncreaseHeight()
+    {
+        if (puzzleDealer.rows < 10)
+        {
+            puzzleDealer.rows++;
+        }
+        else
+        {
+            puzzleDealer.rows = 3;
+        }
+        UpdateData();
+        PressedNewButton();
+    }
+    public void SetActiveSettingsWindow(bool active)
+    {
+        UpdateData();
+        settingsWindow.SetActive(active);
     }
 }
 
