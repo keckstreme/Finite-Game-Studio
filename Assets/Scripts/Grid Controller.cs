@@ -6,7 +6,9 @@ using UnityEngine.UI;
 public class GridController : MonoBehaviour
 {
     [SerializeField] RectTransform gridRT;
+    public RectTransform pausegridRT;
     [SerializeField] RectTransform canvasRT;
+    [SerializeField] RectTransform safeAreaRT;
     [SerializeField] List<Cell> cells = new();
     public GridLayoutGroup GLG;
 
@@ -23,41 +25,93 @@ public class GridController : MonoBehaviour
             linear_gridData[counter++] = item;
         }
 
-        // Place cells
-        if (rowCount <= columnCount) // Wide or square
+        // code left this way for readability.
+        float safeAreaAspectRatio = safeAreaRT.rect.width / safeAreaRT.rect.height;
+        if (safeAreaAspectRatio > 1) // Safe area is wide
         {
-            // Limit grid column count
-            GLG.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-            GLG.constraintCount = columnCount;
+            // Place cells
+            if (rowCount <= columnCount) // Wide or square
+            {
+                // Limit grid column count
+                GLG.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+                GLG.constraintCount = columnCount;
 
-            // Resize cells - consider columns
-            float cellSize = (canvasRT.rect.width - GLG.padding.horizontal + GLG.spacing.x) / columnCount - GLG.spacing.x;
-            GLG.cellSize = new(cellSize, cellSize);
+                // Resize cells - consider columns
+                float cellSize = (safeAreaRT.rect.height - GLG.padding.horizontal + GLG.spacing.x) / columnCount - GLG.spacing.x;
+                GLG.cellSize = new(cellSize, cellSize);
 
-            // Set grid bg width to be as wide as possible
-            gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, canvasRT.rect.width);
+                // Set grid bg width to be as wide as possible
+                gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, safeAreaRT.rect.height);
+                pausegridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, safeAreaRT.rect.height);
 
-            // Set grid bg height
-            float height = GLG.padding.vertical + rowCount * cellSize + (rowCount - 1) * GLG.spacing.y;
-            gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+                // Set grid bg height
+                float height = GLG.padding.vertical + rowCount * cellSize + (rowCount - 1) * GLG.spacing.y;
+                gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+                pausegridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+            }
+            else // Tall
+            {
+                // Limit grid row count
+                GLG.constraint = GridLayoutGroup.Constraint.FixedRowCount;
+                GLG.constraintCount = rowCount;
+
+                // Resize cells - consider rows
+                float cellSize = (safeAreaRT.rect.height - GLG.padding.horizontal + GLG.spacing.x) / rowCount - GLG.spacing.x;
+                GLG.cellSize = new(cellSize, cellSize);
+
+                // Set grid bg height to be as wide as possible
+                gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, safeAreaRT.rect.height);
+                pausegridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, safeAreaRT.rect.height);
+
+                // Set grid bg width
+                float height = GLG.padding.vertical + columnCount * cellSize + (columnCount - 1) * GLG.spacing.y;
+                gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, height);
+                pausegridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, height);
+            }
         }
-        else // Tall
+        else // Safe area is tall (original code.)
         {
-            // Limit grid row count
-            GLG.constraint = GridLayoutGroup.Constraint.FixedRowCount;
-            GLG.constraintCount = rowCount;
+            // Place cells
+            if (rowCount <= columnCount) // Wide or square
+            {
+                // Limit grid column count
+                GLG.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+                GLG.constraintCount = columnCount;
 
-            // Resize cells - consider rows
-            float cellSize = (canvasRT.rect.width - GLG.padding.horizontal + GLG.spacing.x) / rowCount - GLG.spacing.x;
-            GLG.cellSize = new(cellSize, cellSize);
+                // Resize cells - consider columns
+                float cellSize = (canvasRT.rect.width - GLG.padding.horizontal + GLG.spacing.x) / columnCount - GLG.spacing.x;
+                GLG.cellSize = new(cellSize, cellSize);
 
-            // Set grid bg height to be as wide as possible
-            gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, canvasRT.rect.width);
+                // Set grid bg width to be as wide as possible
+                gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, canvasRT.rect.width);
+                pausegridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, canvasRT.rect.width);
 
-            // Set grid bg width
-            float height = GLG.padding.vertical + columnCount * cellSize + (columnCount - 1) * GLG.spacing.y;
-            gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, height);
+                // Set grid bg height
+                float height = GLG.padding.vertical + rowCount * cellSize + (rowCount - 1) * GLG.spacing.y;
+                gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+                pausegridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+            }
+            else // Tall
+            {
+                // Limit grid row count
+                GLG.constraint = GridLayoutGroup.Constraint.FixedRowCount;
+                GLG.constraintCount = rowCount;
+
+                // Resize cells - consider rows
+                float cellSize = (canvasRT.rect.width - GLG.padding.horizontal + GLG.spacing.x) / rowCount - GLG.spacing.x;
+                GLG.cellSize = new(cellSize, cellSize);
+
+                // Set grid bg height to be as wide as possible
+                gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, canvasRT.rect.width);
+                pausegridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, canvasRT.rect.width);
+
+                // Set grid bg width
+                float height = GLG.padding.vertical + columnCount * cellSize + (columnCount - 1) * GLG.spacing.y;
+                gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, height);
+                pausegridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, height);
+            }
         }
+        // code left this way for readability.
 
         if (fresh && GameManager.Instance.playerData.animationsOn)
         {

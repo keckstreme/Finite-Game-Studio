@@ -13,8 +13,13 @@ public class GameManager : MonoBehaviour
         Instance = this;
     }
 
+    public delegate void Events();
+    public event Events pauseEvent;
+    public event Events unpauseEvent;
+
     private void Start()
     {
+        gridController.pausegridRT.gameObject.SetActive(false);
         paused = true;
         cheat = false;
         SetActiveSettingsWindow(false);
@@ -37,7 +42,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    [SerializeField] GridController gridController;
+    public GridController gridController;
     [SerializeField] PuzzleDealer puzzleDealer;
     public Save save;
 
@@ -54,6 +59,7 @@ public class GameManager : MonoBehaviour
         playerData.puzzleMoves = 0;
         gridController.GenerateGrid(playerData.puzzleData, true);
         save.SaveGame();
+        gridController.pausegridRT.gameObject.SetActive(false);
     }
 
     readonly WaitForEndOfFrame WFEOF;
@@ -152,6 +158,10 @@ public class GameManager : MonoBehaviour
         {
             print("WONWONWONWONW");
         }
+        else
+        {
+            save.SaveGame();
+        }
     }
 
     [Header("Settings Scene References")]
@@ -195,6 +205,10 @@ public class GameManager : MonoBehaviour
     {
         UpdateData();
         settingsWindow.SetActive(active);
+        if (active)
+        {
+            save.SaveGame();
+        }
     }
     public void ToggleAnimations()
     {
@@ -206,6 +220,12 @@ public class GameManager : MonoBehaviour
     public void SetPause(bool pause)
     {
         paused = pause;
+        save.SaveGame();
+
+        if (paused) pauseEvent.Invoke();
+        else unpauseEvent.Invoke();
+
+        gridController.pausegridRT.gameObject.SetActive(pause);
     }
 }
 

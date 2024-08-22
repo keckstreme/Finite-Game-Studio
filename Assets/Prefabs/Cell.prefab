@@ -92,8 +92,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 98.5
-  m_fontSizeBase: 98.5
+  m_fontSize: 100
+  m_fontSizeBase: 100
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -228,6 +228,7 @@ MonoBehaviour:
   bg: {fileID: 6706805222289844128}
   text: {fileID: 2251424885500949416}
   animator: {fileID: 7329284504161779400}
+  RT: {fileID: 3851160287338252157}
   myValue: 0
   myRow: 0
   myColumn: 0

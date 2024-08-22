@@ -9,9 +9,28 @@ public class Cell : MonoBehaviour
     [SerializeField] Image bg;
     [SerializeField] TextMeshProUGUI text;
     [SerializeField] Animator animator;
+    [SerializeField] RectTransform RT;
     public int myValue;
     public int myRow;
     public int myColumn;
+
+    private void Start()
+    {
+        GameManager.Instance.pauseEvent += PauseEvent;
+        GameManager.Instance.unpauseEvent += UnpauseEvent;
+    }
+
+    private void PauseEvent()
+    {
+        if (myValue == 0) return;
+        Setcolor(ThemeManager.Instance.accentColor, ThemeManager.Instance.accentColor);
+    }
+
+    private void UnpauseEvent()
+    {
+        if (myValue == 0) return;
+        Setcolor(ThemeManager.Instance.accentColor, ThemeManager.Instance.thirdColor);
+    }
 
     public void LoadCell(int value, bool immediate = false)
     {
@@ -34,6 +53,9 @@ public class Cell : MonoBehaviour
         {
             text.text = value.ToString();
         }
+
+        // Set font size
+        text.fontSize = GameManager.Instance.gridController.GLG.cellSize.x / 2f;
     }
 
     public void StartAnimation()
@@ -43,10 +65,10 @@ public class Cell : MonoBehaviour
         animator.SetTrigger("Start");
     }
 
-    public void Setcolor(Color accent, Color third)
+    public void Setcolor(Color bg_, Color text_)
     {
-        bg.color = accent;
-        text.color = third;
+        bg.color = bg_;
+        text.color = text_;
     }
 
     public void PressedOnMe()
