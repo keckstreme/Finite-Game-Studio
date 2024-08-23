@@ -30,6 +30,8 @@ public class GameManager : MonoBehaviour
         paused = true;
         cheat = false;
         settingsWindow.SetActive(false);
+        recordsWindow.gameObject.SetActive(false);
+        
 
         if (!save.LoadGame()) // If savefile does not exist, generate new board
         {
@@ -174,11 +176,18 @@ public class GameManager : MonoBehaviour
         {
             gridController.wingridRT.gameObject.SetActive(true);
             paused = true;
+
+            Record record = new()
+            {
+                puzzleTime = playerData.puzzleTime,
+                puzzleMoves = playerData.puzzleMoves,
+                rows = playerData.rows,
+                columns = playerData.columns,
+            };
+            playerData.records.Add(record);
         }
-        else
-        {
-            save.SaveGame();
-        }
+
+        save.SaveGame();
     }
 
     [Header("Settings Scene References")]
@@ -186,6 +195,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI heightText;
     [SerializeField] TextMeshProUGUI animationSettingText;
     [SerializeField] GameObject settingsWindow;
+    [SerializeField] RecordsWindow recordsWindow;
     private void UpdateData()
     {
         widthText.text = playerData.columns.ToString();
@@ -240,6 +250,15 @@ public class GameManager : MonoBehaviour
         else unpauseEvent.Invoke();
 
         gridController.pausegridRT.gameObject.SetActive(pause);
+    }
+
+    public void SetActiveRecordsWindow(bool active)
+    {
+        recordsWindow.gameObject.SetActive(active);
+        if (active)
+        {
+            recordsWindow.LoadRecordsData();
+        }
     }
 }
 
@@ -351,7 +370,7 @@ public static class Extensions
         }
     }
 
-    public static string FormatTime(float totalSeconds)
+    public static string FormatTime(this float totalSeconds)
     {
         int minutes = (int)totalSeconds / 60;
         int seconds = (int)totalSeconds % 60;

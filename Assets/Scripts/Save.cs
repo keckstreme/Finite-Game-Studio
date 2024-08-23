@@ -47,4 +47,14 @@ public struct PlayerData
     public int columns;
     public bool animationsOn;
     public int colorTheme;
+    public List<Record> records;
+}
+
+[System.Serializable]
+public struct Record
+{
+    public float puzzleTime;
+    public int puzzleMoves;
+    public int rows;
+    public int columns;
 }

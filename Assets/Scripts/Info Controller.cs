@@ -11,6 +11,6 @@ public class InfoController : MonoBehaviour
     private void Update()
     {
         movesText.text = GameManager.Instance.playerData.puzzleMoves.ToString();
-        timeText.text = Extensions.FormatTime(GameManager.Instance.playerData.puzzleTime);
+        timeText.text = GameManager.Instance.playerData.puzzleTime.FormatTime();
     }
 }
