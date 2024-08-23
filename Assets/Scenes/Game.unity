@@ -3661,8 +3661,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1504932713}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &470835991
@@ -6975,9 +6974,73 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colors:
-    bgColor: {r: 1, g: 1, b: 1, a: 1}
+    gameBgColor: {r: 0, g: 0, b: 0, a: 1}
     accentColor: {r: 1, g: 0.47500002, b: 0.47500002, a: 1}
-    thirdColor: {r: 0.035, g: 0.035, b: 0.035, a: 1}
+    accentColorVibrant: {r: 1, g: 0, b: 0, a: 1}
+    textColor: {r: 0.12100001, g: 0.12100001, b: 0.12100001, a: 1}
+    thirdColor: {r: 0.22700001, g: 0.22700001, b: 0.22700001, a: 1}
+  themes:
+  - gameBgColor: {r: 1, g: 1, b: 1, a: 1}
+    accentColor: {r: 1, g: 0.39215687, b: 0.39215687, a: 1}
+    accentColorVibrant: {r: 0.83137256, g: 0, b: 0, a: 1}
+    textColor: {r: 1, g: 1, b: 1, a: 1}
+    thirdColor: {r: 0.078431375, g: 0.05882353, b: 0.14901961, a: 1}
+  - gameBgColor: {r: 1, g: 1, b: 1, a: 1}
+    accentColor: {r: 1, g: 0.57097965, b: 0.35000002, a: 1}
+    accentColorVibrant: {r: 1, g: 0.34337354, b: 0, a: 1}
+    textColor: {r: 1, g: 1, b: 1, a: 1}
+    thirdColor: {r: 0.078431375, g: 0.05882353, b: 0.14901961, a: 1}
+  - gameBgColor: {r: 0.078431375, g: 0.05882353, b: 0.14901961, a: 1}
+    accentColor: {r: 0.8212667, g: 1, b: 0.34901965, a: 1}
+    accentColorVibrant: {r: 0.4447763, g: 1, b: 0, a: 1}
+    textColor: {r: 0.078431375, g: 0.05882353, b: 0.14901961, a: 1}
+    thirdColor: {r: 0.5466784, g: 0.667, b: 0.2327961, a: 1}
+  - gameBgColor: {r: 0.078431375, g: 0.05882353, b: 0.14901961, a: 1}
+    accentColor: {r: 0.589, g: 1, b: 0.72759104, a: 1}
+    accentColorVibrant: {r: 0, g: 1, b: 0.6166668, a: 1}
+    textColor: {r: 0.078431375, g: 0.05882353, b: 0.14901961, a: 1}
+    thirdColor: {r: 0.32941177, g: 0.56, b: 0.4084706, a: 1}
+  - gameBgColor: {r: 1, g: 1, b: 1, a: 1}
+    accentColor: {r: 0.40400004, g: 0.72630894, b: 1, a: 1}
+    accentColorVibrant: {r: 0, g: 0.45531568, b: 0.84400004, a: 1}
+    textColor: {r: 1, g: 1, b: 1, a: 1}
+    thirdColor: {r: 0.078431375, g: 0.05882353, b: 0.14901961, a: 1}
+  - gameBgColor: {r: 0.078431375, g: 0.05882353, b: 0.14901961, a: 1}
+    accentColor: {r: 0.65711606, g: 0.4039216, b: 1, a: 1}
+    accentColorVibrant: {r: 1, g: 0, b: 0.9173937, a: 1}
+    textColor: {r: 1, g: 1, b: 1, a: 1}
+    thirdColor: {r: 0.28043222, g: 0.17125629, b: 0.426, a: 1}
+  accentColorableObjects:
+  - {fileID: 847098034}
+  - {fileID: 1782594243}
+  - {fileID: 1338491602}
+  - {fileID: 1272551342}
+  - {fileID: 1680235028}
+  - {fileID: 2030250960}
+  accentVibrantColorableObjects:
+  - {fileID: 1218732225}
+  - {fileID: 1588672397}
+  - {fileID: 13954487}
+  - {fileID: 812787274}
+  textColorableObjects:
+  - {fileID: 342365892}
+  - {fileID: 1216172376}
+  - {fileID: 1573813297}
+  - {fileID: 1677777936}
+  - {fileID: 1421145666}
+  - {fileID: 698800796}
+  - {fileID: 1211951277}
+  - {fileID: 52852277}
+  - {fileID: 1176995942}
+  - {fileID: 513808042}
+  - {fileID: 1975293595}
+  - {fileID: 536740262}
+  - {fileID: 1197579296}
+  - {fileID: 742161719}
+  - {fileID: 1272880946}
+  thirdColorableObjects:
+  - {fileID: 1865066531}
+  - {fileID: 1223934358}
 --- !u!114 &902754347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8190,7 +8253,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1018313602
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10435,8 +10498,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1753048588}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1338491599
@@ -11950,37 +12012,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9319030441730614093205080baa74bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1504932712
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1504932713}
-  m_Layer: 0
-  m_Name: color settings
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1504932713
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1504932712}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 460608556}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1530601781
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13271,37 +13302,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9319030441730614093205080baa74bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1753048587
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1753048588}
-  m_Layer: 0
-  m_Name: WIN SCREEN
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1753048588
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1753048587}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1314814054}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1757762798
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15381,7 +15381,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2030250960}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 902754346}
+        m_TargetAssemblyTypeName: ThemeManager, Assembly-CSharp
+        m_MethodName: ActivateNextTheme
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2030250960
 MonoBehaviour:
   m_ObjectHideFlags: 0

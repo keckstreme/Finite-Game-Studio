@@ -16,6 +16,12 @@ public class GameManager : MonoBehaviour
     public delegate void Events();
     public event Events pauseEvent;
     public event Events unpauseEvent;
+    public event Events colorThemeChanged;
+
+    public void InvokeColorThemeChanged()
+    {
+        colorThemeChanged.Invoke();
+    }
 
     private void Start()
     {
@@ -23,7 +29,7 @@ public class GameManager : MonoBehaviour
         gridController.wingridRT.gameObject.SetActive(false);
         paused = true;
         cheat = false;
-        SetActiveSettingsWindow(false);
+        settingsWindow.SetActive(false);
 
         if (!save.LoadGame()) // If savefile does not exist, generate new board
         {
@@ -33,6 +39,13 @@ public class GameManager : MonoBehaviour
         {
             gridController.GenerateGrid(playerData.puzzleData);
         }
+
+        IEnumerator wait_ActivateCurrentTheme()
+        {
+            yield return null;
+            ThemeManager.Instance.ActivateCurrentTheme();
+        }
+        StartCoroutine(wait_ActivateCurrentTheme());
     }
 
     private void Update()
@@ -209,10 +222,7 @@ public class GameManager : MonoBehaviour
     {
         UpdateData();
         settingsWindow.SetActive(active);
-        if (active)
-        {
-            save.SaveGame();
-        }
+        save.SaveGame();
     }
     public void ToggleAnimations()
     {

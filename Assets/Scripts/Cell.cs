@@ -18,6 +18,7 @@ public class Cell : MonoBehaviour
     {
         GameManager.Instance.pauseEvent += PauseEvent;
         GameManager.Instance.unpauseEvent += UnpauseEvent;
+        GameManager.Instance.colorThemeChanged += UpdateColorTheme;
     }
 
     private void PauseEvent()
@@ -29,7 +30,7 @@ public class Cell : MonoBehaviour
     private void UnpauseEvent()
     {
         if (myValue == 0) return;
-        Setcolor(ThemeManager.Instance.colors.accentColor, ThemeManager.Instance.colors.thirdColor);
+        Setcolor(ThemeManager.Instance.colors.accentColor, ThemeManager.Instance.colors.textColor);
     }
 
     public void LoadCell(int value, bool immediate = false)
@@ -38,7 +39,7 @@ public class Cell : MonoBehaviour
 
         if (immediate && myValue != 0)
         {
-            Setcolor(ThemeManager.Instance.colors.accentColor, ThemeManager.Instance.colors.thirdColor);
+            Setcolor(ThemeManager.Instance.colors.accentColor, ThemeManager.Instance.colors.textColor);
         }
         else
         {
@@ -61,8 +62,14 @@ public class Cell : MonoBehaviour
     public void StartAnimation()
     {
         if (myValue == 0) return;
-        Setcolor(ThemeManager.Instance.colors.accentColor, ThemeManager.Instance.colors.thirdColor);
+        Setcolor(ThemeManager.Instance.colors.accentColor, ThemeManager.Instance.colors.textColor);
         animator.SetTrigger("Start");
+    }
+
+    private void UpdateColorTheme()
+    {
+        if (myValue == 0) return;
+        Setcolor(ThemeManager.Instance.colors.accentColor, ThemeManager.Instance.colors.textColor);
     }
 
     public void Setcolor(Color bg_, Color text_)

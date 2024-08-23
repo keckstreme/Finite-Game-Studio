@@ -13,7 +13,7 @@ public class Save : MonoBehaviour
         FileStream file = File.Create(saveFilePath);
         bf.Serialize(file, GameManager.Instance.playerData);
         file.Close();
-        //Debug.Log("Game was successfully saved to file: " + saveFilePath);
+        Debug.Log("Game was successfully saved to file: " + saveFilePath);
     }
 
     public bool LoadGame()
