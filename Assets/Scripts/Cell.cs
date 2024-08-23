@@ -23,13 +23,13 @@ public class Cell : MonoBehaviour
     private void PauseEvent()
     {
         if (myValue == 0) return;
-        Setcolor(ThemeManager.Instance.accentColor, ThemeManager.Instance.accentColor);
+        Setcolor(ThemeManager.Instance.colors.accentColor, ThemeManager.Instance.colors.accentColor);
     }
 
     private void UnpauseEvent()
     {
         if (myValue == 0) return;
-        Setcolor(ThemeManager.Instance.accentColor, ThemeManager.Instance.thirdColor);
+        Setcolor(ThemeManager.Instance.colors.accentColor, ThemeManager.Instance.colors.thirdColor);
     }
 
     public void LoadCell(int value, bool immediate = false)
@@ -38,7 +38,7 @@ public class Cell : MonoBehaviour
 
         if (immediate && myValue != 0)
         {
-            Setcolor(ThemeManager.Instance.accentColor, ThemeManager.Instance.thirdColor);
+            Setcolor(ThemeManager.Instance.colors.accentColor, ThemeManager.Instance.colors.thirdColor);
         }
         else
         {
@@ -61,7 +61,7 @@ public class Cell : MonoBehaviour
     public void StartAnimation()
     {
         if (myValue == 0) return;
-        Setcolor(ThemeManager.Instance.accentColor, ThemeManager.Instance.thirdColor);
+        Setcolor(ThemeManager.Instance.colors.accentColor, ThemeManager.Instance.colors.thirdColor);
         animator.SetTrigger("Start");
     }
 

@@ -7,6 +7,7 @@ public class GridController : MonoBehaviour
 {
     [SerializeField] RectTransform gridRT;
     public RectTransform pausegridRT;
+    public RectTransform wingridRT;
     [SerializeField] RectTransform canvasRT;
     [SerializeField] RectTransform safeAreaRT;
     [SerializeField] List<Cell> cells = new();
@@ -25,6 +26,7 @@ public class GridController : MonoBehaviour
             linear_gridData[counter++] = item;
         }
 
+        // nastiest piece of the project is here :[]
         // code left this way for readability.
         float safeAreaAspectRatio = safeAreaRT.rect.width / safeAreaRT.rect.height;
         if (safeAreaAspectRatio > 1) // Safe area is wide
@@ -43,11 +45,13 @@ public class GridController : MonoBehaviour
                 // Set grid bg width to be as wide as possible
                 gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, safeAreaRT.rect.height);
                 pausegridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, safeAreaRT.rect.height);
+                wingridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, safeAreaRT.rect.height);
 
                 // Set grid bg height
                 float height = GLG.padding.vertical + rowCount * cellSize + (rowCount - 1) * GLG.spacing.y;
                 gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
                 pausegridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+                wingridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
             }
             else // Tall
             {
@@ -62,11 +66,13 @@ public class GridController : MonoBehaviour
                 // Set grid bg height to be as wide as possible
                 gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, safeAreaRT.rect.height);
                 pausegridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, safeAreaRT.rect.height);
+                wingridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, safeAreaRT.rect.height);
 
                 // Set grid bg width
                 float height = GLG.padding.vertical + columnCount * cellSize + (columnCount - 1) * GLG.spacing.y;
                 gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, height);
                 pausegridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, height);
+                wingridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, height);
             }
         }
         else // Safe area is tall (original code.)
@@ -85,11 +91,13 @@ public class GridController : MonoBehaviour
                 // Set grid bg width to be as wide as possible
                 gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, canvasRT.rect.width);
                 pausegridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, canvasRT.rect.width);
+                wingridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, canvasRT.rect.width);
 
                 // Set grid bg height
                 float height = GLG.padding.vertical + rowCount * cellSize + (rowCount - 1) * GLG.spacing.y;
                 gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
                 pausegridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+                wingridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
             }
             else // Tall
             {
@@ -104,11 +112,13 @@ public class GridController : MonoBehaviour
                 // Set grid bg height to be as wide as possible
                 gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, canvasRT.rect.width);
                 pausegridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, canvasRT.rect.width);
+                wingridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, canvasRT.rect.width);
 
                 // Set grid bg width
                 float height = GLG.padding.vertical + columnCount * cellSize + (columnCount - 1) * GLG.spacing.y;
                 gridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, height);
                 pausegridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, height);
+                wingridRT.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, height);
             }
         }
         // code left this way for readability.
@@ -243,15 +253,6 @@ public class GridController : MonoBehaviour
                 {
                     requiredCells[columnCount * j + i - 1].StartAnimation();
                 }
-                yield return new WaitForSecondsRealtime(0.04f);
-            }
-        }
-
-        IEnumerator topleft()
-        {
-            for (int i = 0; i < requiredCells.Count; i++)
-            {
-                print(gridData[i, i]);
                 yield return new WaitForSecondsRealtime(0.04f);
             }
         }

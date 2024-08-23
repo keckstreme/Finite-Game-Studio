@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         gridController.pausegridRT.gameObject.SetActive(false);
+        gridController.wingridRT.gameObject.SetActive(false);
         paused = true;
         cheat = false;
         SetActiveSettingsWindow(false);
@@ -57,9 +58,11 @@ public class GameManager : MonoBehaviour
         paused = true;
         playerData.puzzleData = puzzleDealer.CreateRandomPuzzleData();
         playerData.puzzleMoves = 0;
+        playerData.puzzleTime = 0;
         gridController.GenerateGrid(playerData.puzzleData, true);
         save.SaveGame();
         gridController.pausegridRT.gameObject.SetActive(false);
+        gridController.wingridRT.gameObject.SetActive(false);
     }
 
     readonly WaitForEndOfFrame WFEOF;
@@ -156,7 +159,8 @@ public class GameManager : MonoBehaviour
 
         if (win)
         {
-            print("WONWONWONWONW");
+            gridController.wingridRT.gameObject.SetActive(true);
+            paused = true;
         }
         else
         {

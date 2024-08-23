@@ -16,6 +16,19 @@ public class ThemeManager : MonoBehaviour
         Application.targetFrameRate = 60;
     }
 
+    public ColorTheme colors;
+
+    public List<ColorTheme> themes;
+
+    public void ActivateNextTheme()
+    {
+
+    }
+}
+
+[System.Serializable]
+public class ColorTheme
+{
     public Color bgColor;
     public Color accentColor;
     public Color thirdColor;
